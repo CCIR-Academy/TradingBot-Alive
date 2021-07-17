@@ -1,3 +1,6 @@
 [submodule "freqtrade"]
 	path = freqtrade
 	url = https://github.com.cnpmjs.org/freqtrade/freqtrade.git
+[submodule "frequi"]
+	path = frequi
+	url = https://github.com/freqtrade/frequi.git

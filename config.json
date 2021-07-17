@@ -79,11 +79,11 @@
     "api_server": {
         "enabled": true,
         "listen_ip_address": "127.0.0.1",
-        "listen_port": 8080,
+        "listen_port": 8081,
         "verbosity": "error",
         "enable_openapi": false,
         "jwt_secret_key": "f62f7f84cbe03f3e64c5fb71fd050a8976f1473189a57648d02f7a5ac03ceae0",
-        "CORS_origins": [],
+        "CORS_origins": ["http://127.0.0.1:8080", "http://localhost:8080"],
         "username": "freqtrader",
         "password": "freqtrader"
     },

@@ -91,12 +91,16 @@ class StrategyAlive(IStrategy):
         'subplots': {
             # Subplots - each dict defines one additional plot
             "MACD": {
-                'macd': {'color': 'blue'},
-                'macdsignal': {'color': 'orange'},
+                'macd': {'color': 'pink'},
+                'macdsignal': {'color': 'purple'},
+                'deltaMACD': {
+                    'color': 'orange',
+                    'type': 'bar'
+                },
             },
             "RSI": {
                 'rsi': {'color': 'red'},
-            }
+            },
         }
     }
     def informative_pairs(self):
@@ -329,7 +333,8 @@ class StrategyAlive(IStrategy):
                 dataframe['best_bid'] = ob['bids'][0][0]
                 dataframe['best_ask'] = ob['asks'][0][0]
         """
-
+        dataframe['macd_shift'] = dataframe.shift()['macd']
+        dataframe['deltaMACD'] = dataframe['macd'] - dataframe['macd_shift']
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -339,15 +344,23 @@ class StrategyAlive(IStrategy):
         :param metadata: Additional information, like the currently traded pair
         :return: DataFrame with buy column
         """
+        # dataframe.loc[
+        #     (
+        #         (qtpylib.crossed_above(dataframe['rsi'], 30)) &  # Signal: RSI crosses above 30
+        #         (dataframe['tema'] <= dataframe['bb_middleband']) &  # Guard: tema below BB middle
+        #         (dataframe['tema'] > dataframe['tema'].shift(1)) &  # Guard: tema is raising
+        #         (dataframe['volume'] > 0)  # Make sure Volume is not 0
+        #     ),
+        #     'buy'] = 1
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['rsi'], 30)) &  # Signal: RSI crosses above 30
-                (dataframe['tema'] <= dataframe['bb_middleband']) &  # Guard: tema below BB middle
-                (dataframe['tema'] > dataframe['tema'].shift(1)) &  # Guard: tema is raising
-                (dataframe['volume'] > 0)  # Make sure Volume is not 0
+                (dataframe['deltaMACD'] > 0) &
+                (dataframe['macd'] >0 )# Signal: deltaMACD is above zero
+                # (dataframe['tema'] <= dataframe['bb_middleband']) &  # Guard: tema below BB middle
+                # (dataframe['tema'] > dataframe['tema'].shift(1)) &  # Guard: tema is raising
+                # (dataframe['volume'] > 0)  # Make sure Volume is not 0
             ),
             'buy'] = 1
-
         return dataframe
 
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -359,11 +372,11 @@ class StrategyAlive(IStrategy):
         """
         dataframe.loc[
             (
-                (qtpylib.crossed_above(dataframe['rsi'], 70)) &  # Signal: RSI crosses above 70
-                (dataframe['tema'] > dataframe['bb_middleband']) &  # Guard: tema above BB middle
-                (dataframe['tema'] < dataframe['tema'].shift(1)) &  # Guard: tema is falling
-                (dataframe['volume'] > 0)  # Make sure Volume is not 0
+                (dataframe['deltaMACD'] < 0) &
+                (dataframe['macd'] <0 )# Signal: deltaMACD is above zero
+                # (dataframe['tema'] <= dataframe['bb_middleband']) &  # Guard: tema below BB middle
+                # (dataframe['tema'] > dataframe['tema'].shift(1)) &  # Guard: tema is raising
+                # (dataframe['volume'] > 0)  # Make sure Volume is not 0
             ),
             'sell'] = 1
         return dataframe
-    
