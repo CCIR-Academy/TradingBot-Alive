@@ -50,7 +50,10 @@ freqtrade new-config --config config.json
 Note: Based on the guide from `freqUI`, you may need to adjust the following settings in `config.json`
 ```json
 // Note: Only replace if different, and do not delete.
-"api_server": {
+{
+    "stake_amount": 500,
+    "dry_run_wallet": 100000,
+    "api_server": {
         "enabled": true,
         "listen_ip_address": "127.0.0.1",
         "listen_port": 8081,
@@ -58,6 +61,7 @@ Note: Based on the guide from `freqUI`, you may need to adjust the following set
         "username": "freqtrader",
         "password": "freqtrader"
     },
+}
 ```
 
 ### freqUI Installation
@@ -100,3 +104,13 @@ https://www.freqtrade.io/en/stable/strategy-customization/
 
 ## Informative Notes:
 1. If the submodules are not recursively cloned, use `git submodule update --recursive` to manually update the submodules.
+2. The default lint options for `freqUI` seems to be too strict with EOF character which may cause errors for `Vue` in rendering. Edit `freqUI/.prettierrc.json` in the following way to get around.
+```json
+{
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "files": "./src/**/*.{js,vue,json}",
+    "endOfLine": "auto"
+}
+3. If the stake amount and dry run wallet are not set properly, no trades would be made in some cases, and you may need to manually change them in `config.json`. The default settings provided by the repo has been validated to be a good starting point.

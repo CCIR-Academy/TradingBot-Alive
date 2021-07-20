@@ -8,7 +8,7 @@ from pandas import DataFrame
 
 from freqtrade.strategy import IStrategy
 from freqtrade.strategy import CategoricalParameter, DecimalParameter, IntParameter
-
+from freqtrade.persistence import Trade
 # --------------------------------
 # Add your lib to import here
 import talib.abstract as ta
@@ -39,8 +39,9 @@ class StrategyAlive(IStrategy):
     # Minimal ROI designed for the strategy.
     # This attribute will be overridden if the config file contains "minimal_roi".
     minimal_roi = {
-        "60": 0.01,
-        "30": 0.02,
+        "40": 0.0,
+        "30": 0.01,
+        "20": 0.02,
         "0": 0.04
     }
 
