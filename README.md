@@ -15,7 +15,7 @@ Required:
 ## Setting up Env
 0. Preparing the project root. Remember to clone recursively as we are using submodules
 ```powershell
-git clone --recurse-submodules https://github.com/Alive24/TradingBot-Alive
+git clone --recurse-submodules https://github.com/CCIR-Academy/TradingBot-Alive.git
 ```
 Note: Since this point, the appropriate working directory would be mentioned in the comments by `@` (e.g. `@repoRoot`)
 1. Create Anaconda Environment
@@ -44,7 +44,7 @@ pip install -e .
 # Step 1 - Initialize user folder
 freqtrade create-userdir --userdir user_data
 # Step 2 - Create a new configuration file
-# Note: You can skip this config creation as the repo contains one in advance with some basic tweaks for the sake of other components.
+# Note: You can skip this config creation as the repo contains one in advance with some basic tweaks for the sake of other components; in addition, only a selection of pairs of crytocurrencies have been left..
 freqtrade new-config --config config.json
 ```
 Note: Based on the guide from `freqUI`, you may need to adjust the following settings in `config.json`
